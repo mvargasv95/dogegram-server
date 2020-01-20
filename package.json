@@ -4,6 +4,7 @@
   "description": "A gram for doges",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon --exec babel-node server",
     "lint": "eslint server"
   },
   "repository": {
@@ -36,8 +37,13 @@
     "eslint-plugin-standard": "^4.0.1",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
+    "lodash": "^4.17.15",
     "mongoose": "^5.8.9",
+    "nanoid": "^2.1.9",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2"
   }
 }

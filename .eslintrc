@@ -10,7 +10,7 @@
       "prettier/prettier": [
         "error",
         {
-          "semi": true,
+          "semi": false,
           "printWidth": 120,
           "singleQuote": true,
           "bracketSpacing": true

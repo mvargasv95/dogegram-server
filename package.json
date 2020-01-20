@@ -1,0 +1,43 @@
+{
+  "name": "dogegram",
+  "version": "1.0.0",
+  "description": "A gram for doges",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mvargasv95/Dogegram.git"
+  },
+  "author": "Minor and Sergio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mvargasv95/Dogegram/issues"
+  },
+  "homepage": "https://github.com/mvargasv95/Dogegram#readme",
+  "dependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "apollo-server": "^2.9.16",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
+    "mongoose": "^5.8.9",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1"
+  }
+}

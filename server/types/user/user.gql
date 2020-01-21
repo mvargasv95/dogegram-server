@@ -10,7 +10,7 @@ input NewUserInput {
 
 type Query {
   user(input: ID!): User!
-  users: [User!]
+  users: [User!]!
 }
 
 type Mutation {

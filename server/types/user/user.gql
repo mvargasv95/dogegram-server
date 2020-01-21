@@ -15,13 +15,22 @@ input NewUserInput {
   avatar: String
 }
 
+type LoginUserInput {
+  username: String!
+  password: String!
+}
+
+type AuthPayload {
+  token: String!
+}
+
 type Query {
   user(input: ID!): User!
-  users: [User!]!
+  users: [User]!
 }
 
 type Mutation {
-  newUser(input: NewUserInput!): User!
+  signUp(input: NewUserInput!): AuthPayload!
 }
 
 

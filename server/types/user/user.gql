@@ -2,10 +2,18 @@
 type User {
   id: ID!
   name: String!
+  username: String!
+  email: String!
+  password: String!
+  avatar: String
 }
 
 input NewUserInput {
   name: String!
+  username: String!
+  email: String!
+  password: String!
+  avatar: String
 }
 
 type Query {

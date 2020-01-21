@@ -5,7 +5,7 @@ const user = (_, { input }) => User.findById(input)
 
 const users = () => User.find({})
 
-const newUser = (_, { input: { name } }) => User.create({ id: nanoid(), name })
+const newUser = (_, { input }) => User.create({ id: nanoid(), ...input })
 
 export default {
   Query: {

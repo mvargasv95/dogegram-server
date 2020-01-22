@@ -53,10 +53,11 @@ userSchema.pre('save', function(next) {
 
 userSchema.methods.checkPassword = function(password) {
   const passwordHash = this.password
-
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, passwordHash, (err, same) => {
-      if (err) return reject(err)
+      if (err) {
+        return reject(err)
+      }
 
       resolve(same)
     })

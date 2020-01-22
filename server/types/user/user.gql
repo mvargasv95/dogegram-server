@@ -15,7 +15,21 @@ input NewUserInput {
   avatar: String
 }
 
-type LoginUserInput {
+input UpdateUserInput {
+  id: ID!
+  name: String
+  username: String
+  email: String
+  password: String
+  avatar: String
+}
+
+input LoginByEmailUserInput {
+  email: String!
+  password: String!
+}
+
+input LoginByUsernameUserInput {
   username: String!
   password: String!
 }
@@ -26,11 +40,14 @@ type AuthPayload {
 
 type Query {
   user(input: ID!): User!
-  users: [User]!
+  users: [User!]!
 }
 
 type Mutation {
+  updateUser(input: UpdateUserInput!): User!
   signUp(input: NewUserInput!): AuthPayload!
+  signInByEmail(input: LoginByEmailUserInput!): AuthPayload!
+  signInByUsername(input: LoginByUsernameUserInput!): AuthPayload!
 }
 
 

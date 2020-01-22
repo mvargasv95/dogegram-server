@@ -25,14 +25,10 @@ const users = () =>
 const updateUser = (_, { input }) => {
   const { id } = input
   delete input.id
-  if (input.password && input.password.length < 8) throw new Error('Password minimun lenght not reached')
+  if (input.password && input.password.length < 8) throw new Error('Password minimun length not reached')
   return User.findById(id, (err, user) => {
     if (err) throw new Error(err)
-    if (input.name) user.name = input.name
-    if (input.username) user.username = input.username
-    if (input.email) user.email = input.email
-    if (user.password) user.password = input.password
-    if (input.avatar) user.avatar = input.avatar
+    for (const key in input) user[key] = input[key]
     user.save()
     return user
   })

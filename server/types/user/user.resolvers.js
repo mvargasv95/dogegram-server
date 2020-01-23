@@ -1,5 +1,7 @@
 import nanoid from 'nanoid'
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
+import lodash from 'lodash'
 import { User } from './user.model'
 
 export const newToken = ({ id }) => {
@@ -21,17 +23,18 @@ const users = () =>
     .lean()
     .exec()
 
-// it's returning old user. check this
-const updateUser = (_, { input }) => {
-  const { id } = input
-  delete input.id
+const updateUser = async (_, { input }) => {
   if (input.password && input.password.length < 8) throw new Error('Password minimun length not reached')
-  return User.findById(id, (err, user) => {
+  if (!mongoose.Types.ObjectId.isValid(input.id)) throw new Error('Incorrect Id format')
+  const user = await User.findById(input.id, (err, user) => {
     if (err) throw new Error(err)
-    for (const key in input) user[key] = input[key]
-    user.save()
-    return user
+    if (user) {
+      for (const key in input) user[key] = input[key]
+      user.save()
+    }
   })
+  if (!user) throw new Error('Unable to find user')
+  return { name: user.name, email: user.email, username: user.username, ...input, _id: user.id }
 }
 
 const signUp = (_, { input }) => {

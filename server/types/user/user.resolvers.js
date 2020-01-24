@@ -1,7 +1,6 @@
 import nanoid from 'nanoid'
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
-import lodash from 'lodash'
 import { User } from './user.model'
 
 export const newToken = ({ id }) => {
@@ -44,17 +43,11 @@ const signUp = (_, { input }) => {
   return { token }
 }
 
-const signInByEmail = async (_, { input }) => {
-  const user = await User.findOne({ email: input.email }).exec()
-  if (!user) throw new Error('Unable to find user. Please try again')
-  const match = await user.checkPassword(input.password)
-  if (!match) throw new Error('Password does not match. Please try again')
-  const token = newToken(user)
-  return { token }
-}
-
-const signInByUsername = async (_, { input }) => {
-  const user = await User.findOne({ username: input.username }).exec()
+const signIn = async (_, { input }) => {
+  if (!input.email && !input.username) throw new Error('Please provide an email address or username')
+  let user = null
+  if (input.email) user = await User.findOne({ email: input.email }).exec()
+  if (!user && input.username) user = await (await User.findOne({ username: input.username })).exec()
   if (!user) throw new Error('Unable to find user. Please try again')
   const match = await user.checkPassword(input.password)
   if (!match) throw new Error('Password does not match. Please try again')
@@ -70,8 +63,7 @@ export default {
   Mutation: {
     updateUser,
     signUp,
-    signInByEmail,
-    signInByUsername
+    signIn
   },
   User: {
     id(user) {

@@ -9,23 +9,28 @@ export const newToken = ({ id }) => {
   })
 }
 
-const user = (_, { input }) => {
-  const user = User.findById(input)
+const whoAmI = async (_, __, ctx) => {
+  const user = await User.findById(ctx.id)
     .lean()
     .exec()
-  if (!user) throw new Error('Unable to find user. Please try again')
-  return user
+  if (!user) {
+    throw new Error('Unable to find user. Please try again')
+  } else {
+    return user
+  }
 }
 
-const users = () =>
-  User.find({})
+const users = () => {
+  return User.find({})
     .lean()
     .exec()
+}
 
-const updateUser = async (_, { input }) => {
-  if (input.password && input.password.length < 8) throw new Error('Password minimun length not reached')
-  if (!mongoose.Types.ObjectId.isValid(input.id)) throw new Error('Incorrect Id format')
-  const user = await User.findById(input.id, (err, user) => {
+const updateUser = async (_, { input }, ctx) => {
+  if (!ctx) throw new Error('Not authorized')
+  if (input.password && input.password.length < 8) throw new Error('Password minimum length not reached')
+  if (!mongoose.Types.ObjectId.isValid(ctx.id)) throw new Error('Not authorized')
+  const user = await User.findById(ctx.id, (err, user) => {
     if (err) throw new Error(err)
     if (user) {
       for (const key in input) user[key] = input[key]
@@ -33,7 +38,7 @@ const updateUser = async (_, { input }) => {
     }
   })
   if (!user) throw new Error('Unable to find user')
-  return { name: user.name, email: user.email, username: user.username, ...input, _id: user.id }
+  return { name: user.name, email: user.email, username: user.username, ...input, _id: ctx.id }
 }
 
 const signUp = (_, { input }) => {
@@ -47,7 +52,7 @@ const signIn = async (_, { input }) => {
   if (!input.email && !input.username) throw new Error('Please provide an email address or username')
   let user = null
   if (input.email) user = await User.findOne({ email: input.email }).exec()
-  if (!user && input.username) user = await (await User.findOne({ username: input.username })).exec()
+  if (!user && input.username) user = await User.findOne({ username: input.username }).exec()
   if (!user) throw new Error('Unable to find user. Please try again')
   const match = await user.checkPassword(input.password)
   if (!match) throw new Error('Password does not match. Please try again')
@@ -57,7 +62,7 @@ const signIn = async (_, { input }) => {
 
 export default {
   Query: {
-    user,
+    whoAmI,
     users
   },
   Mutation: {

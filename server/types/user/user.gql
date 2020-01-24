@@ -16,7 +16,6 @@ input NewUserInput {
 }
 
 input UpdateUserInput {
-  id: ID!
   name: String
   username: String
   email: String
@@ -35,7 +34,7 @@ type AuthPayload {
 }
 
 type Query {
-  user(input: ID!): User!
+  whoAmI: User!
   users: [User!]!
 }
 

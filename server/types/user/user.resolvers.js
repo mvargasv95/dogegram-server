@@ -10,6 +10,7 @@ export const newToken = ({ id }) => {
 }
 
 const whoAmI = async (_, __, ctx) => {
+  if (!ctx.id) throw new Error('Please sign in or sign up')
   const user = await User.findById(ctx.id)
     .lean()
     .exec()
@@ -21,15 +22,14 @@ const whoAmI = async (_, __, ctx) => {
 }
 
 const users = () => {
-  return User.find({})
+  User.find({})
     .lean()
     .exec()
 }
 
 const updateUser = async (_, { input }, ctx) => {
-  if (!ctx) throw new Error('Not authorized')
+  if (!ctx.id || !mongoose.Types.ObjectId.isValid(ctx.id)) throw new Error('Not authorized')
   if (input.password && input.password.length < 8) throw new Error('Password minimum length not reached')
-  if (!mongoose.Types.ObjectId.isValid(ctx.id)) throw new Error('Not authorized')
   const user = await User.findById(ctx.id, (err, user) => {
     if (err) throw new Error(err)
     if (user) {

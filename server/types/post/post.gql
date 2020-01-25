@@ -1,0 +1,32 @@
+scalar Date
+
+type Comments {
+  id: ID!
+  body: String!
+  author: User!
+  createdAt: Date!
+}
+
+
+type Post {
+  id: ID!
+  caption: String
+  media: String
+  likes: Int!
+  author: User!
+  comments: [Comments]
+}
+
+input NewPostInput {
+  caption: String
+  media: String
+}
+
+extend type Query {
+  post(input: ID!): Post!
+  posts: [Post]!
+}
+
+extend type Mutation {
+  newPost(input: NewPostInput): Post!
+} 

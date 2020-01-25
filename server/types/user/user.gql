@@ -7,7 +7,7 @@ type User {
   avatar: String
 }
 
-input NewUserInput {
+input SignUpInput {
   name: String!
   username: String!
   email: String!
@@ -35,12 +35,12 @@ type AuthPayload {
 
 type Query {
   whoAmI: User!
-  users: [User!]!
+  users: [User]!
 }
 
 type Mutation {
   updateUser(input: UpdateUserInput!): User!
-  signUp(input: NewUserInput!): AuthPayload!
+  signUp(input: SignUpInput!): AuthPayload!
   signIn(input: SignInInput!): AuthPayload!
 }
 

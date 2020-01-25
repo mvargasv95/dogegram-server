@@ -1,5 +1,5 @@
 {
-  "restartable": "rs",
+  
   "ignore": [
     ".git",
     "node_modules/**/node_modules",
@@ -10,7 +10,6 @@
     "js": "node"
   },
   
-  "runOnChangeOnly": false,
   "watch": [
     "src/**/*.js",
     "src/**/*.graphql",

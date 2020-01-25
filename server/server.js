@@ -1,10 +1,12 @@
 import { ApolloServer } from 'apollo-server'
+import jwt from 'jsonwebtoken'
+import { merge } from 'lodash'
 import { connect } from './db'
 import { loadTypeSchema } from './utils/schema'
 import user from './types/user/user.resolvers'
-import jwt from 'jsonwebtoken'
+import post from './types/post/post.resolvers'
 
-const types = ['user']
+const types = ['user', 'post']
 
 const verifyToken = token =>
   new Promise((resolve, reject) => {
@@ -27,7 +29,7 @@ export const start = async () => {
 
   const server = new ApolloServer({
     typeDefs: [rootSchema, ...schemaTypes],
-    resolvers: user,
+    resolvers: merge({}, user, post),
     context: async ({ req }) => {
       let payload = null
       if (req.headers.authorization) {

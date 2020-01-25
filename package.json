@@ -42,10 +42,10 @@
     "lodash": "^4.17.15",
     "mongoose": "^5.8.9",
     "nanoid": "^2.1.9",
-    "nodemon": "^2.0.2",
     "prettier": "^1.19.1"
   },
   "devDependencies": {
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2"
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "nodemon": "^2.0.2"
   }
 }

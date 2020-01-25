@@ -24,8 +24,11 @@ input NewPostInput {
 extend type Query {
   post(input: ID!): Post!
   posts: [Post]!
+  myPosts: [Post]!
 }
 
 extend type Mutation {
   newPost(input: NewPostInput): Post!
+  increasePostLikes(input: ID!): Post!
+  decreasePostLikes(input: ID!): Post!
 } 

@@ -9,6 +9,7 @@ const newToken = ({ _id: id }) => {
   })
 }
 
+// queries
 const whoAmI = async (_, __, ctx) => {
   if (!ctx.id) throw new Error('Please sign in or sign up')
   const user = await User.findById(ctx.id)
@@ -26,6 +27,7 @@ const users = () =>
     .lean()
     .exec()
 
+// mutation
 const updateUser = async (_, { input }, ctx) => {
   if (!ctx.id || !mongoose.Types.ObjectId.isValid(ctx.id)) throw new Error('Not authorized')
   if (input.password && input.password.length < 8) throw new Error('Password minimum length not reached')

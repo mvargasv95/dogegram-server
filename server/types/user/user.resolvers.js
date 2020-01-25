@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
 import { User } from './user.model'
 
-export const newToken = ({ id }) => {
+const newToken = ({ _id: id }) => {
   return jwt.sign({ id }, 'secret', {
     expiresIn: '1h'
   })
@@ -21,11 +21,10 @@ const whoAmI = async (_, __, ctx) => {
   }
 }
 
-const users = () => {
+const users = () =>
   User.find({})
     .lean()
     .exec()
-}
 
 const updateUser = async (_, { input }, ctx) => {
   if (!ctx.id || !mongoose.Types.ObjectId.isValid(ctx.id)) throw new Error('Not authorized')
@@ -41,10 +40,10 @@ const updateUser = async (_, { input }, ctx) => {
   return { name: user.name, email: user.email, username: user.username, ...input, _id: ctx.id }
 }
 
-const signUp = (_, { input }) => {
-  const newUser = User.create({ id: nanoid(), ...input })
-  if (!newUser) throw new Error('Unable to create user. Please try again')
-  const token = newToken(newUser)
+const signUp = async (_, { input }) => {
+  const user = await User.create({ id: nanoid(), ...input })
+  if (!user) throw new Error('Unable to create user. Please try again')
+  const token = newToken(user)
   return { token }
 }
 

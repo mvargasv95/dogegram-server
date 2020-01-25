@@ -32,6 +32,9 @@ export default {
     newPost
   },
   Post: {
+    id(post) {
+      return post._id
+    },
     author(post) {
       return User.findById(post.author)
     }

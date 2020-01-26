@@ -61,7 +61,21 @@ const decreasePostLikes = async (_, { input }, ctx) => {
   return { ...post, likes }
 }
 
-const addComment = async (_, { input }, ctx) => {}
+const addComment = async (_, { input }, ctx) => {
+  if (!validateObjectId(input.id)) throw new Error('Invalid post ID')
+  if (!ctx.id) throw new Error('Not authorized')
+  const comment = { id: nanoid(), body: input.body, author: ctx.id }
+  const post = await Post.findById(input.id, (err, post) => {
+    if (err) throw new Error('Unable to find post')
+    if (post) {
+      post.comments.push(comment)
+      post.save()
+    }
+  })
+  if (!post) throw new Error('Unable to find post')
+  post.comments.push(comment)
+  return post
+}
 
 export default {
   Query: {
@@ -81,6 +95,13 @@ export default {
     },
     author(post) {
       return User.findById(post.author)
+    },
+    comments: {
+      Comment: {
+        id(comment) {
+          return comment._id
+        }
+      }
     }
   }
 }

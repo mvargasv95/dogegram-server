@@ -1,6 +1,6 @@
 scalar Date
 
-type Comments {
+type Comment {
   id: ID!
   body: String!
   author: User!
@@ -13,12 +13,17 @@ type Post {
   media: String
   likes: Int!
   author: User!
-  comments: [Comments]
+  comments: [Comment]!
 }
 
 input NewPostInput {
   caption: String
   media: String
+}
+
+input AddCommentInput {
+  id: ID!
+  body: String!
 }
 
 extend type Query {
@@ -31,4 +36,5 @@ extend type Mutation {
   newPost(input: NewPostInput): Post!
   increasePostLikes(input: ID!): Post!
   decreasePostLikes(input: ID!): Post!
+  addComment(input: AddCommentInput!): Post!
 } 

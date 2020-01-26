@@ -18,7 +18,6 @@ const postSchema = new mongoose.Schema(
     },
     comments: [
       {
-        id: mongoose.Schema.Types.ObjectId,
         body: {
           type: String,
           maxlength: 500

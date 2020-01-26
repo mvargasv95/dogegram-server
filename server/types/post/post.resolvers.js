@@ -1,6 +1,7 @@
 import nanoid from 'nanoid'
 import { Post } from './post.model'
 import { User } from '../user/user.model'
+import { verifyObjectId, validateObjectId } from '../../utils/helpers'
 
 // queries
 const post = async (_, { input }) => {
@@ -32,21 +33,35 @@ const newPost = async (_, { input }, ctx) => {
 
 const increasePostLikes = async (_, { input }, ctx) => {
   if (!ctx.id) throw new Error('Not authorized')
-  const post = await Post.findById(input)
+  if (!validateObjectId(input)) throw new Error('Invalid post ID')
+  const post = await Post.findById(input, (err, post) => {
+    if (err) throw new Error('Unable to find post')
+    if (post) {
+      post.likes = ++post.likes
+      post.save()
+    }
+  })
   if (!post) throw new Error('Unable to find post')
-  const newPost = await Post.findByIdAndUpdate(input, { likes: ++post.likes }, { new: true })
-  return newPost
+  return { ...post, likes: ++post.likes }
 }
 
 const decreasePostLikes = async (_, { input }, ctx) => {
+  let likes = 0
+  if (!validateObjectId(input)) throw new Error('Invalid post ID')
   if (!ctx.id) throw new Error('Not authorized')
-  const post = await Post.findById(input)
+  const post = await Post.findById(input, (err, post) => {
+    if (err) throw new Error('Unable to find post')
+    if (post && post.likes > 0) {
+      post.likes = --post.likes
+      post.save()
+    }
+  })
   if (!post) throw new Error('Unable to find post')
-  if (post.likes < 1) throw new Error('Likes are already 0')
-  const newPost = await Post.findByIdAndUpdate(input, { likes: --post.likes }, { new: true })
-  console.log('here', newPost)
-  return newPost
+  if (!post.likes <= 0) likes = --post.likes
+  return { ...post, likes }
 }
+
+const addComment = async (_, { input }, ctx) => {}
 
 export default {
   Query: {
@@ -57,7 +72,8 @@ export default {
   Mutation: {
     newPost,
     increasePostLikes,
-    decreasePostLikes
+    decreasePostLikes,
+    addComment
   },
   Post: {
     id(post) {

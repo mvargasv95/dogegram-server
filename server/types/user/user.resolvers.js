@@ -1,7 +1,7 @@
 import nanoid from 'nanoid'
 import jwt from 'jsonwebtoken'
-import mongoose from 'mongoose'
 import { User } from './user.model'
+import { validateObjectId } from '../../utils/helpers'
 
 const newToken = ({ _id: id }) => {
   return jwt.sign({ id }, 'secret', {
@@ -29,7 +29,7 @@ const users = () =>
 
 // mutation
 const updateUser = async (_, { input }, ctx) => {
-  if (!ctx.id || !mongoose.Types.ObjectId.isValid(ctx.id)) throw new Error('Not authorized')
+  if (!ctx.id || validateObjectId(ctx.id)) throw new Error('Not authorized')
   if (input.password && input.password.length < 8) throw new Error('Password minimum length not reached')
   const user = await User.findById(ctx.id, (err, user) => {
     if (err) throw new Error(err)

@@ -1,7 +1,8 @@
 import nanoid from 'nanoid'
 import jwt from 'jsonwebtoken'
 import { User } from './user.model'
-import { verifyObjectId } from '../../utils/helpers'
+import { Post } from '../post/post.model'
+import { validateObjectId } from '../../utils/helpers'
 
 const newToken = ({ _id: id }) => {
   return jwt.sign({ id }, 'secret', {
@@ -29,7 +30,7 @@ const users = () =>
 
 // mutation
 const updateUser = async (_, { input }, ctx) => {
-  if (!ctx.id || verifyObjectId(ctx.id)) throw new Error('Not authorized')
+  if (!ctx.id || !validateObjectId(ctx.id)) throw new Error('Not authorized')
   if (input.password && input.password.length < 8) throw new Error('Password minimum length not reached')
   const user = await User.findById(ctx.id, (err, user) => {
     if (err) throw new Error(err)
@@ -61,6 +62,13 @@ const signIn = async (_, { input }) => {
   return { token }
 }
 
+const removeUser = async (_, { input }) => {
+  await Post.deleteMany({ author: input })
+  const user = User.findByIdAndRemove(input)
+  if (!user) throw new Error('Unable to find user')
+  return user
+}
+
 export default {
   Query: {
     whoAmI,
@@ -69,7 +77,8 @@ export default {
   Mutation: {
     updateUser,
     signUp,
-    signIn
+    signIn,
+    removeUser
   },
   User: {
     id(user) {

@@ -42,6 +42,7 @@ type Mutation {
   updateUser(input: UpdateUserInput!): User!
   signUp(input: SignUpInput!): AuthPayload!
   signIn(input: SignInInput!): AuthPayload!
+  removeUser(input: ID!): User!
 }
 
 

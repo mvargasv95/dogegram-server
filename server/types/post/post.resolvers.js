@@ -32,8 +32,7 @@ const newPost = async (_, { input }, ctx) => {
 }
 
 const increasePostLikes = async (_, { input }, ctx) => {
-  if (!ctx.id) throw new Error('Not authorized')
-  if (!validateObjectId(input)) throw new Error('Invalid post ID')
+  if (!ctx.id || !validateObjectId(input)) throw new Error('Not authorized')
   const post = await Post.findById(input, (err, post) => {
     if (err) throw new Error('Unable to find post')
     if (post) {
@@ -47,8 +46,7 @@ const increasePostLikes = async (_, { input }, ctx) => {
 
 const decreasePostLikes = async (_, { input }, ctx) => {
   let likes = 0
-  if (!validateObjectId(input)) throw new Error('Invalid post ID')
-  if (!ctx.id) throw new Error('Not authorized')
+  if (!ctx.id || !validateObjectId(input)) throw new Error('Not authorized')
   const post = await Post.findById(input, (err, post) => {
     if (err) throw new Error('Unable to find post')
     if (post && post.likes > 0) {
@@ -62,8 +60,7 @@ const decreasePostLikes = async (_, { input }, ctx) => {
 }
 
 const addComment = async (_, { input }, ctx) => {
-  if (!validateObjectId(input.id)) throw new Error('Invalid post ID')
-  if (!ctx.id) throw new Error('Not authorized')
+  if (!ctx.id || !validateObjectId(input.id)) throw new Error('Not authorized')
   const comment = { id: nanoid(), body: input.body, author: ctx.id }
   const post = await Post.findById(input.id, (err, post) => {
     if (err) throw new Error('Unable to find post')
@@ -95,13 +92,24 @@ export default {
     },
     author(post) {
       return User.findById(post.author)
+    }
+  },
+  Comment: {
+    id(comment) {
+      return comment._id
     },
-    comments: {
-      Comment: {
-        id(comment) {
-          return comment._id
+    author: async comment => {
+      const user = await User.findById(comment.author)
+      const msg = 'User not found'
+      if (!user) {
+        return {
+          _id: msg,
+          name: msg,
+          email: msg,
+          username: msg
         }
       }
+      return user
     }
   }
 }

@@ -7,6 +7,14 @@ type User {
   avatar: String
 }
 
+input UpdateUserInput {
+  name: String
+  username: String
+  email: String
+  password: String
+  avatar: String
+}
+
 input SignUpInput {
   name: String!
   username: String!
@@ -15,13 +23,6 @@ input SignUpInput {
   avatar: String
 }
 
-input UpdateUserInput {
-  name: String
-  username: String
-  email: String
-  password: String
-  avatar: String
-}
 
 input SignInInput {
   email: String

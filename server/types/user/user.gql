@@ -23,7 +23,6 @@ input SignUpInput {
   avatar: String
 }
 
-
 input SignInInput {
   email: String
   username: String

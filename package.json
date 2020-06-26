@@ -24,7 +24,7 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
-    "apollo-server": "^2.9.16",
+    "apollo-server": "^2.14.2",
     "babel-eslint": "^10.0.3",
     "bcrypt": "^3.0.7",
     "eslint": "^6.8.0",
